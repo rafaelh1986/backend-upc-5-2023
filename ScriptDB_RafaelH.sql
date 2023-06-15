@@ -1,0 +1,343 @@
+--/////////////////////////USUARIOS///////////////////////////////////////////
+
+IF OBJECT_ID('USUARIOS', 'U') IS NOT NULL 
+  DROP TABLE USUARIOS; 
+GO
+
+CREATE TABLE USUARIOS
+(
+  "ID"                          INT IDENTITY(1,1),
+  "USER_NAME"                   VARCHAR(40) NOT NULL,
+  "NOMBRE_COMPLETO"             VARCHAR(100) NOT NULL,
+  "PASSWORD"		            VARCHAR(100) NOT NULL,
+  "USUARIO_REGISTRO"            VARCHAR(50) DEFAULT SYSTEM_USER NOT NULL,
+  "FECHA_REGISTRO"              DATETIME DEFAULT getdate() NOT NULL,
+  "ESTADO_REGISTRO"				INT DEFAULT 1 NOT NULL, 
+  CONSTRAINT USUARIOS_PK		PRIMARY KEY (ID)
+);
+--/////////////////////////CATEGORIA///////////////////////////////////////////
+
+IF OBJECT_ID('CATEGORIA', 'U') IS NOT NULL 
+  DROP TABLE CATEGORIA; 
+GO
+
+CREATE TABLE CATEGORIA
+(
+  "ID"                          INT IDENTITY(1,1),
+  "NOMBRE"						VARCHAR(100) NOT NULL,
+  "USUARIO_REGISTRO"            VARCHAR(50) DEFAULT SYSTEM_USER NOT NULL,
+  "FECHA_REGISTRO"              DATETIME DEFAULT getdate() NOT NULL,
+  "ESTADO_REGISTRO"				INT DEFAULT 1 NOT NULL, 
+  CONSTRAINT CATEGORIA_PK		PRIMARY KEY (ID)
+);
+
+--/////////////////////////PRODUCTO///////////////////////////////////////////
+
+IF OBJECT_ID('PRODUCTO', 'U') IS NOT NULL 
+  DROP TABLE PRODUCTO; 
+GO
+
+CREATE TABLE PRODUCTO
+(
+  "ID"                          INT IDENTITY(1,1),
+  "NOMBRE"						VARCHAR(100) NOT NULL,
+  "ID_CATEGORIA"				INT NOT NULL,
+  "USUARIO_REGISTRO"            VARCHAR(50) DEFAULT SYSTEM_USER NOT NULL,
+  "FECHA_REGISTRO"              DATETIME DEFAULT getdate() NOT NULL,
+  "ESTADO_REGISTRO"				INT DEFAULT 1 NOT NULL, 
+  CONSTRAINT PRODUCTO_PK		PRIMARY KEY (ID)
+);
+
+ALTER TABLE PRODUCTO
+  ADD CONSTRAINT "FK_PRODUCTO_TO_CATEGORIA" 
+  FOREIGN KEY(ID_CATEGORIA)
+  REFERENCES CATEGORIA("ID");
+  
+  
+--/////////////////////////CARRITO_COMPRA///////////////////////////////////////////
+
+IF OBJECT_ID('CARRITO_COMPRA', 'U') IS NOT NULL 
+  DROP TABLE CARRITO_COMPRA; 
+GO
+
+CREATE TABLE CARRITO_COMPRA
+(
+  "ID"                          INT IDENTITY(1,1),
+  "FECHA"						DATETIME NOT NULL,
+  "ID_USUARIO"					INT NOT NULL,
+  "USUARIO_REGISTRO"            VARCHAR(50) DEFAULT SYSTEM_USER NOT NULL,
+  "FECHA_REGISTRO"              DATETIME DEFAULT getdate() NOT NULL,
+  "ESTADO_REGISTRO"				INT DEFAULT 1 NOT NULL, 
+  CONSTRAINT CARRITO_COMPRA_PK		PRIMARY KEY (ID)
+);
+
+ALTER TABLE CARRITO_COMPRA
+  ADD CONSTRAINT "FK_CARRITO_COMPRA_TO_USUARIO" 
+  FOREIGN KEY("ID_USUARIO")
+  REFERENCES USUARIOS("ID");
+
+
+--/////////////////////////H_PRODUCTO///////////////////////////////////////////
+
+IF OBJECT_ID('H_PRODUCTO', 'U') IS NOT NULL 
+  DROP TABLE H_PRODUCTO; 
+GO
+
+CREATE TABLE H_PRODUCTO
+(
+  "ID"                          INT IDENTITY(1,1),
+  "CANTIDAD"					INT NOT NULL,
+  "ID_PRODUCTO"					INT NOT NULL,
+  "ID_CARRITO_COMPRA"			INT NOT NULL,
+  "USUARIO_REGISTRO"            VARCHAR(50) DEFAULT SYSTEM_USER NOT NULL,
+  "FECHA_REGISTRO"              DATETIME DEFAULT getdate() NOT NULL,
+  "ESTADO_REGISTRO"				INT DEFAULT 1 NOT NULL, 
+  CONSTRAINT H_PRODUCTO_PK		PRIMARY KEY (ID)
+);
+
+ALTER TABLE H_PRODUCTO
+  ADD CONSTRAINT "FK_H_PRODUCTO_TO_PRODUCTO" 
+  FOREIGN KEY("ID_PRODUCTO")
+  REFERENCES PRODUCTO("ID");
+
+ALTER TABLE H_PRODUCTO
+  ADD CONSTRAINT "FK_H_PRODUCTO_TO_CARRITO_COMPRA" 
+  FOREIGN KEY("ID_CARRITO_COMPRA")
+  REFERENCES CARRITO_COMPRA("ID");
+
+--//Procedure select 
+--//Usuarios
+USE [upc-database-rafael]
+GO
+CREATE or ALTER PROCEDURE SelectUsuarios
+AS
+    SELECT * FROM USUARIOS
+    WHERE ESTADO_REGISTRO = 1
+GO
+--//producto
+USE [upc-database-rafael]
+GO
+CREATE or ALTER PROCEDURE SelectProducto
+AS
+    SELECT * FROM PRODUCTO
+    WHERE ESTADO_REGISTRO = 1
+GO
+USE [upc-database-rafael]
+GO
+--//Categoria
+CREATE or ALTER PROCEDURE SelectCategoria
+AS
+    SELECT * FROM CATEGORIA
+    WHERE ESTADO_REGISTRO = 1
+GO
+--//CarritoCompra
+USE [upc-database-rafael]
+GO
+CREATE or ALTER PROCEDURE SelectCarritoCompra
+AS
+    SELECT * FROM CARRITO_COMPRA
+    WHERE ESTADO_REGISTRO = 1
+GO
+--//H_Producto
+USE [upc-database-rafael]
+GO
+CREATE or ALTER PROCEDURE SelectH_Producto
+AS
+    SELECT * FROM H_PRODUCTO
+    WHERE ESTADO_REGISTRO = 1
+GO
+
+--//Procedure select by Id
+--//Usuarios
+USE [upc-database-rafael]
+GO
+CREATE or ALTER PROCEDURE SelectUsuariosById
+@Id INT
+AS
+    SELECT * FROM USUARIOS
+    WHERE ID = @Id AND ESTADO_REGISTRO = 1
+GO
+--//Producto
+USE [upc-database-rafael]
+GO
+CREATE or ALTER PROCEDURE SelectProductoById
+@Id INT
+AS
+    SELECT * FROM PRODUCTO
+    WHERE ID = @Id AND ESTADO_REGISTRO = 1
+GO
+USE [upc-database-rafael]
+GO
+--//Categoria
+CREATE or ALTER PROCEDURE SelectCategoriaById
+@Id INT
+AS
+    SELECT * FROM CATEGORIA
+    WHERE ID = @Id AND ESTADO_REGISTRO = 1
+GO
+--//CarritoCompra
+USE [upc-database-rafael]
+GO
+CREATE or ALTER PROCEDURE SelectCarritoCompraById
+@Id INT
+AS
+    SELECT * FROM CARRITO_COMPRA
+    WHERE ID = @Id AND ESTADO_REGISTRO = 1
+GO
+--//H_Producto
+USE [upc-database-rafael]
+GO
+CREATE or ALTER PROCEDURE SelectH_ProductoById
+@Id INT
+AS
+    SELECT * FROM H_PRODUCTO
+    WHERE ID = @Id AND ESTADO_REGISTRO = 1
+GO
+
+--//Procedimiento Insert
+--//Usuarios
+USE [upc-database-rafael]
+GO
+CREATE or ALTER PROCEDURE InsertUsuarios
+    @NOMBRE_COMPLETO VARCHAR(100),
+    @USER_NAME VARCHAR(40),
+    @PASSWORD VARCHAR(100)
+AS
+    INSERT INTO [dbo].[USUARIOS]([USER_NAME],[NOMBRE_COMPLETO], [PASSWORD]) VALUES (@USER_NAME,@NOMBRE_COMPLETO,@PASSWORD)
+GO
+--//Categoria
+USE [upc-database-rafael]
+GO
+CREATE or ALTER PROCEDURE InsertCategoria
+    @NOMBRE VARCHAR(100)
+AS
+    INSERT INTO [dbo].[CATEGORIA]([NOMBRE]) VALUES (@NOMBRE) 
+GO
+--//Producto
+USE [upc-database-rafael]
+GO
+CREATE or ALTER PROCEDURE InsertProducto
+    @NOMBRE			VARCHAR(100),
+    @ID_CATEGORIA	INT
+AS
+   INSERT INTO [dbo].[PRODUCTO]([NOMBRE], [ID_CATEGORIA]) VALUES (@NOMBRE,@ID_CATEGORIA)  
+GO
+--//CarritoCompra
+USE [upc-database-rafael]
+GO
+CREATE or ALTER PROCEDURE InsertCarritoCompra
+    @ID_USUARIO INT
+AS
+   INSERT INTO [dbo].[CARRITO_COMPRA]([FECHA], [ID_USUARIO]) VALUES (getdate(), @ID_USUARIO)   
+GO
+--//H_Producto
+USE [upc-database-rafael]
+GO
+CREATE or ALTER PROCEDURE InsertH_Producto
+    @CANTIDAD           INT,
+    @ID_PRODUCTO        INT,
+    @ID_CARRITO_COMPRA  INT
+AS
+   INSERT INTO [dbo].[H_PRODUCTO]([CANTIDAD], [ID_PRODUCTO], [ID_CARRITO_COMPRA]) VALUES (@CANTIDAD,@ID_PRODUCTO, @ID_CARRITO_COMPRA)  
+GO
+--//Procedimiento Update
+--//Usuarios
+USE [upc-database-rafael]
+GO
+CREATE or ALTER PROCEDURE UpdateUsuarios
+    @Id INT,
+    @USER_NAME VARCHAR(40),
+    @NOMBRE_COMPLETO VARCHAR(100),
+    @PASSWORD VARCHAR(100)
+AS
+    UPDATE USUARIOS SET [USER_NAME] = @USER_NAME, NOMBRE_COMPLETO = @NOMBRE_COMPLETO, [PASSWORD] = @PASSWORD WHERE ID = @Id
+GO
+--//Categoria
+USE [upc-database-rafael]
+GO
+CREATE or ALTER PROCEDURE UpdateCategoria
+    @Id INT,
+    @NOMBRE VARCHAR(100)
+AS
+    UPDATE CATEGORIA SET NOMBRE = @Nombre WHERE ID = @Id 
+GO
+--//Producto
+USE [upc-database-rafael]
+GO
+CREATE or ALTER PROCEDURE UpdateProducto
+    @Id INT,
+    @NOMBRE			VARCHAR(100),
+    @ID_CATEGORIA	INT
+AS
+   UPDATE [PRODUCTO] SET NOMBRE = @Nombre, ID_CATEGORIA = @ID_CATEGORIA WHERE ID = @Id
+GO
+--//CarritoCompra
+USE [upc-database-rafael]
+GO
+CREATE or ALTER PROCEDURE UpdateCarritoCompra
+    @Id INT,
+    @ID_USUARIO INT
+AS
+   UPDATE [CARRITO_COMPRA] SET FECHA=getdate(), ID_USUARIO = @ID_USUARIO WHERE ID = @Id  
+GO
+--//H_Producto
+USE [upc-database-rafael]
+GO
+CREATE or ALTER PROCEDURE InsertH_Producto
+    @Id                 INT,
+    @CANTIDAD           INT,
+    @ID_PRODUCTO        INT,
+    @ID_CARRITO_COMPRA  INT
+AS
+   UPDATE H_PRODUCTO SET CANTIDAD = @CANTIDAD, [ID_PRODUCTO] = @ID_PRODUCTO, [ID_CARRITO_COMPRA] = @ID_CARRITO_COMPRA WHERE ID = @Id
+GO
+--//Procedimiento Delete
+--//Usuarios
+USE [upc-database-rafael]
+GO
+CREATE or ALTER PROCEDURE DeleteUsuarios
+    @Id INT
+AS
+    UPDATE USUARIOS SET ESTADO_REGISTRO = 0 WHERE ID = @Id
+GO
+--//Categoria
+USE [upc-database-rafael]
+GO
+CREATE or ALTER PROCEDURE DeleteCategoria
+    @Id INT
+AS
+    UPDATE CATEGORIA SET ESTADO_REGISTRO = 0 WHERE ID = @Id 
+GO
+--//Producto
+USE [upc-database-rafael]
+GO
+CREATE or ALTER PROCEDURE DeleteProducto
+    @Id INT
+AS
+   UPDATE [PRODUCTO] SET ESTADO_REGISTRO = 0 WHERE ID = @Id
+GO
+--//CarritoCompra
+USE [upc-database-rafael]
+GO
+CREATE or ALTER PROCEDURE DeleteCarritoCompra
+    @Id INT
+AS
+   UPDATE [CARRITO_COMPRA] SET ESTADO_REGISTRO = 0 WHERE ID = @Id 
+GO
+--//H_Producto
+USE [upc-database-rafael]
+GO
+CREATE or ALTER PROCEDURE DeleteH_Producto
+    @Id                 INT
+AS
+   UPDATE H_PRODUCTO SET ESTADO_REGISTRO = 0 WHERE ID = @Id
+GO
+
+EXEC InsertUsuarios 'Rafael Heredia','rh','123'
+EXEC SelectUsuariosById 1
+
+
+
+
+
+
