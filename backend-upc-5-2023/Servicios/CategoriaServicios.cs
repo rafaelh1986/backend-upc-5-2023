@@ -20,7 +20,7 @@ namespace backend_upc_5_2023.Servicios
         /// <exception cref="System.Data.SqlClient.SqlException"></exception>
         public static IEnumerable<T> Get<T>()
         {
-            const string sql = "Exec SelectCategoria";
+            const string sql = "SelectCategoria";
 
             return DBManager.Instance.GetData<T>(sql);
         }
@@ -33,7 +33,7 @@ namespace backend_upc_5_2023.Servicios
         /// <returns></returns>
         public static T GetById<T>(int id)
         {
-            const string sql = "Exec SelectCategoriaById @Id";
+            const string sql = "SelectCategoriaById";
 
             var parameters = new DynamicParameters();
             parameters.Add("ID", id, DbType.Int64);
@@ -41,6 +41,17 @@ namespace backend_upc_5_2023.Servicios
             var result = DBManager.Instance.GetDataConParametros<T>(sql, parameters);
 
             return result.FirstOrDefault();
+        }
+        public static int ValidarCategoria(Categoria categoria)
+        {
+            const string sql = "SP_EXISTE_CATEGORIA";
+
+            var parameters = new DynamicParameters();
+            parameters.Add("NOMBRE", categoria.Nombre, DbType.String);
+
+            //var result = DBManager.Instance.GetDataConParametros<T>(sql, parameters);
+
+            return DBManager.Instance.GetData(sql,parameters);
         }
 
         /// <summary>
@@ -51,7 +62,7 @@ namespace backend_upc_5_2023.Servicios
         /// <exception cref="System.Data.SqlClient.SqlException"></exception>
         public static int Insert(Categoria categoria)
         {
-            const string sql = "Exec InsertCategoria @Nombre ";
+            const string sql = "InsertCategoria";
 
             var parameters = new DynamicParameters();
             parameters.Add("Nombre", categoria.Nombre, DbType.String);
@@ -69,7 +80,7 @@ namespace backend_upc_5_2023.Servicios
         /// <exception cref="System.Data.SqlClient.SqlException"></exception>
         public static int Update(Categoria categoria)
         {
-            const string sql = "Exec UpdateCategoria @Id, @Nombre";
+            const string sql = "UpdateCategoria";
 
             var parameters = new DynamicParameters();
             parameters.Add("ID", categoria.Id, DbType.Int64);
@@ -88,7 +99,7 @@ namespace backend_upc_5_2023.Servicios
         /// <exception cref="System.Data.SqlClient.SqlException"></exception>
         public static int Delete(int id)
         {
-            const string sql = "Exec DeleteCategoria @Id";
+            const string sql = "DeleteCategoria";
 
             var parameters = new DynamicParameters();
             parameters.Add("ID", id, DbType.Int64);
