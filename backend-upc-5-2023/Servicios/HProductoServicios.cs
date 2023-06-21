@@ -20,7 +20,7 @@ namespace backend_upc_5_2023.Servicios
         /// <exception cref="System.Data.SqlClient.SqlException"></exception>
         public static IEnumerable<T> Get<T>()
         {
-            const string sql = "SelectH_Producto";
+            const string sql = "SP_OBTENERH_PRODUCTO";
 
             return DBManager.Instance.GetData<T>(sql);
         }
@@ -33,7 +33,7 @@ namespace backend_upc_5_2023.Servicios
         /// <returns></returns>
         public static HProducto GetById(int id)
         {
-            const string sql = "SelectH_Producto";
+            const string sql = "SP_OBTENERH_PRODUCTOBYID";
 
             var parameters = new DynamicParameters();
             parameters.Add("ID", id, DbType.Int64);
@@ -76,12 +76,12 @@ namespace backend_upc_5_2023.Servicios
         /// <exception cref="System.Data.SqlClient.SqlException"></exception>
         public static int Insert(HProducto hProducto)
         {
-            const string sql = "InsertH_Producto";
+            const string sql = "SP_INSERTARH_PRODUCTO";
 
             var parameters = new DynamicParameters();
             parameters.Add("Cantidad", hProducto.Cantidad, DbType.Int64);
-            parameters.Add("IdProducto", hProducto.IdProducto, DbType.Int64);
-            parameters.Add("IdCarritoCompra", hProducto.IdCarritoCompra, DbType.Int64);
+            parameters.Add("Id_Producto", hProducto.IdProducto, DbType.Int64);
+            parameters.Add("Id_CarritoCompra", hProducto.IdCarritoCompra, DbType.Int64);
 
             var result = DBManager.Instance.SetData(sql, parameters);
 

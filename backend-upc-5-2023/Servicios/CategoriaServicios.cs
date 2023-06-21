@@ -20,7 +20,7 @@ namespace backend_upc_5_2023.Servicios
         /// <exception cref="System.Data.SqlClient.SqlException"></exception>
         public static IEnumerable<T> Get<T>()
         {
-            const string sql = "SelectCategoria";
+            const string sql = "SP_OBTENERCATEGORIA";
 
             return DBManager.Instance.GetData<T>(sql);
         }
@@ -33,7 +33,7 @@ namespace backend_upc_5_2023.Servicios
         /// <returns></returns>
         public static T GetById<T>(int id)
         {
-            const string sql = "SelectCategoriaById";
+            const string sql = "SP_OBTENERCATEGORIABYID";
 
             var parameters = new DynamicParameters();
             parameters.Add("ID", id, DbType.Int64);
@@ -42,17 +42,17 @@ namespace backend_upc_5_2023.Servicios
 
             return result.FirstOrDefault();
         }
-        public static int ValidarCategoria(Categoria categoria)
-        {
-            const string sql = "SP_EXISTE_CATEGORIA";
+        //public static int ValidarCategoria(Categoria categoria)
+        //{
+        //    const string sql = "SP_EXISTE_CATEGORIA";
 
-            var parameters = new DynamicParameters();
-            parameters.Add("NOMBRE", categoria.Nombre, DbType.String);
+        //    var parameters = new DynamicParameters();
+        //    parameters.Add("NOMBRE", categoria.Nombre, DbType.String);
 
             //var result = DBManager.Instance.GetDataConParametros<T>(sql, parameters);
 
-            return DBManager.Instance.GetData(sql,parameters);
-        }
+        //    return DBManager.Instance.GetData(sql,parameters);
+        //}
 
         /// <summary>
         /// Inserts the specified categoría.
@@ -62,7 +62,7 @@ namespace backend_upc_5_2023.Servicios
         /// <exception cref="System.Data.SqlClient.SqlException"></exception>
         public static int Insert(Categoria categoria)
         {
-            const string sql = "InsertCategoria";
+            const string sql = "SP_INSERTARCATEGORIA";
 
             var parameters = new DynamicParameters();
             parameters.Add("Nombre", categoria.Nombre, DbType.String);
@@ -80,7 +80,7 @@ namespace backend_upc_5_2023.Servicios
         /// <exception cref="System.Data.SqlClient.SqlException"></exception>
         public static int Update(Categoria categoria)
         {
-            const string sql = "UpdateCategoria";
+            const string sql = "SP_ACTUALIZARCATEGORIA";
 
             var parameters = new DynamicParameters();
             parameters.Add("ID", categoria.Id, DbType.Int64);
@@ -99,7 +99,7 @@ namespace backend_upc_5_2023.Servicios
         /// <exception cref="System.Data.SqlClient.SqlException"></exception>
         public static int Delete(int id)
         {
-            const string sql = "DeleteCategoria";
+            const string sql = "SP_ELIMINARCATEGORIA";
 
             var parameters = new DynamicParameters();
             parameters.Add("ID", id, DbType.Int64);
