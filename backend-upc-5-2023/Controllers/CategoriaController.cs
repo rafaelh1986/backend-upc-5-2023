@@ -88,15 +88,10 @@ namespace backend_upc_5_2023.Controllers
         {
             try
             {
-                var a = CategoriaServicios.ValidarCategoria(categoria);
-
-                if (0==0)
-                {
+                
                     var result = CategoriaServicios.Insert(categoria);
                     return Ok(result);
-                }
-                
-                    return StatusCode(500, "Categoria ya existe");
+               
             }
             catch (Exception ex)
             {
