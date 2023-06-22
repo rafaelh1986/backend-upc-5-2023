@@ -3,6 +3,7 @@
 using backend_upc_5_2023.Connection;
 using backend_upc_5_2023.Dominio;
 using backend_upc_5_2023.Servicios;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend_upc_5_2023.Controllers
@@ -11,6 +12,7 @@ namespace backend_upc_5_2023.Controllers
     /// Servicios web para la entidad: <see cref="Categoria"/>
     /// </summary>
     /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
+    [EnableCors("DevelopmentCors")]
     [Route("api/[controller]")]
     [ApiController]
     public class CategoriaController : ControllerBase
@@ -64,7 +66,7 @@ namespace backend_upc_5_2023.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("GetCategoriaById")]
-        public IActionResult GetCategoriaById(int id)
+        public IActionResult GetCategoriaById([FromQuery] int id)
         {
             try
             {
@@ -88,10 +90,8 @@ namespace backend_upc_5_2023.Controllers
         {
             try
             {
-                
-                    var result = CategoriaServicios.Insert(categoria);
-                    return Ok(result);
-               
+                var result = CategoriaServicios.Insert(categoria);
+                return Ok(result);
             }
             catch (Exception ex)
             {

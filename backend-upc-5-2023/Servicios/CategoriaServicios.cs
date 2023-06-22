@@ -36,7 +36,7 @@ namespace backend_upc_5_2023.Servicios
             const string sql = "SP_OBTENERCATEGORIABYID";
 
             var parameters = new DynamicParameters();
-            parameters.Add("ID", id, DbType.Int64);
+            parameters.Add("@ID", id, DbType.Int64);
 
             var result = DBManager.Instance.GetDataConParametros<T>(sql, parameters);
 
@@ -65,7 +65,7 @@ namespace backend_upc_5_2023.Servicios
             const string sql = "SP_INSERTARCATEGORIA";
 
             var parameters = new DynamicParameters();
-            parameters.Add("Nombre", categoria.Nombre, DbType.String);
+            parameters.Add("@NOMBRE", categoria.Nombre, DbType.String);
 
             var result = DBManager.Instance.SetData(sql, parameters);
 
@@ -83,8 +83,8 @@ namespace backend_upc_5_2023.Servicios
             const string sql = "SP_ACTUALIZARCATEGORIA";
 
             var parameters = new DynamicParameters();
-            parameters.Add("ID", categoria.Id, DbType.Int64);
-            parameters.Add("NOMBRE", categoria.Nombre, DbType.String);
+            parameters.Add("@ID", categoria.Id, DbType.Int64);
+            parameters.Add("@NOMBRE", categoria.Nombre, DbType.String);
 
             var result = DBManager.Instance.SetData(sql, parameters);
 
@@ -102,7 +102,7 @@ namespace backend_upc_5_2023.Servicios
             const string sql = "SP_ELIMINARCATEGORIA";
 
             var parameters = new DynamicParameters();
-            parameters.Add("ID", id, DbType.Int64);
+            parameters.Add("@ID", id, DbType.Int64);
 
             var result = DBManager.Instance.SetData(sql, parameters);
             return result;

@@ -36,7 +36,7 @@ namespace backend_upc_5_2023.Servicios
             const string sql = "SP_OBTENERUSUARIOSBYID";
 
             var parameters = new DynamicParameters();
-            parameters.Add("ID", id, DbType.Int64);
+            parameters.Add("@ID", id, DbType.Int64);
 
             var result = DBManager.Instance.GetDataConParametros<T>(sql, parameters);
 
@@ -54,9 +54,9 @@ namespace backend_upc_5_2023.Servicios
             const string sql = "SP_INSERTARUSUARIOS";
 
             var parameters = new DynamicParameters();
-            parameters.Add("UserName", usuarios.UserName, DbType.String);
-            parameters.Add("NombreCompleto", usuarios.NombreCompleto, DbType.String);
-            parameters.Add("Password", usuarios.Password, DbType.String);
+            parameters.Add("@USER_NAME", usuarios.UserName, DbType.String);
+            parameters.Add("@NOMBRE_COMPLETO", usuarios.NombreCompleto, DbType.String);
+            parameters.Add("@PASSWORD", usuarios.Password, DbType.String);
 
             var result = DBManager.Instance.SetData(sql, parameters);
 

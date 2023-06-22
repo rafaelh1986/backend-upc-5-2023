@@ -34,7 +34,7 @@ namespace backend_upc_5_2023.Servicios
             const string sql = "SP_OBTENERH_PRODUCTOBYID";
 
             var parameters = new DynamicParameters();
-            parameters.Add("Id", id, DbType.Int64);
+            parameters.Add("@Id", id, DbType.Int64);
 
             var result = DBManager.Instance.GetDataConParametros<Producto>(sql, parameters);
 
@@ -58,8 +58,8 @@ namespace backend_upc_5_2023.Servicios
         {
             const string sql = "SP_INSERTARPRODUCTO";
             var parameters = new DynamicParameters();
-            parameters.Add("Nombre", producto.Nombre, DbType.String);
-            parameters.Add("IdCategoria", producto.IdCategoria, DbType.Int64);
+            parameters.Add("@NOMBRE", producto.Nombre, DbType.String);
+            parameters.Add("@ID_CATEGORIA", producto.IdCategoria, DbType.Int64);
 
             var result = DBManager.Instance.SetData(sql, parameters);
 
@@ -77,9 +77,9 @@ namespace backend_upc_5_2023.Servicios
             const string sql = "SP_ACTUALIZARPRODUCTO";
 
             var parameters = new DynamicParameters();
-            parameters.Add("Id", producto.Id, DbType.Int64);
-            parameters.Add("Nombre", producto.Nombre, DbType.String);
-            parameters.Add("IdCategoria", producto.IdCategoria, DbType.Int64);
+            parameters.Add("@Id", producto.Id, DbType.Int64);
+            parameters.Add("@NOMBRE", producto.Nombre, DbType.String);
+            parameters.Add("@ID_CATEGORIA", producto.IdCategoria, DbType.Int64);
 
             var result = DBManager.Instance.SetData(sql, parameters);
 
@@ -97,7 +97,7 @@ namespace backend_upc_5_2023.Servicios
             const string sql = "SP_ELIMINARPRODUCTO";
 
             var parameters = new DynamicParameters();
-            parameters.Add("ID", id, DbType.Int64);
+            parameters.Add("@ID", id, DbType.Int64);
 
             var result = DBManager.Instance.SetData(sql, parameters);
             return result;
