@@ -18,7 +18,7 @@ namespace backend_upc_5_2023.Servicios
         /// <exception cref="System.Data.SqlClient.SqlException"></exception>
         public static IEnumerable<Producto> Get()
         {
-            const string sql = "SP_OBTENERH_PRODUCTO";
+            const string sql = "SP_OBTENERPRODUCTO";
 
             var enummerableProductos = DBManager.Instance.GetData<Producto>(sql);
 
@@ -38,7 +38,7 @@ namespace backend_upc_5_2023.Servicios
         /// <returns></returns>
         public static Producto GetById(int id)
         {
-            const string sql = "SP_OBTENERH_PRODUCTOBYID";
+            const string sql = "SP_OBTENERPRODUCTOBYID";
 
             var parameters = new DynamicParameters();
             parameters.Add("@Id", id, DbType.Int64);
