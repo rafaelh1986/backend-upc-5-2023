@@ -16,4 +16,10 @@
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Dominio\Alumno.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Dominio\Alumno.cs" />
+  </ItemGroup>
 </Project>
