@@ -1,6 +1,4 @@
-﻿// Ignore Spelling: Alumno
-
-using backend_upc_5_2023.Connection;
+﻿using backend_upc_5_2023.Connection;
 using backend_upc_5_2023.Dominio;
 using Dapper;
 using System.Data;
@@ -8,9 +6,9 @@ using System.Data;
 namespace backend_upc_5_2023.Servicios
 {
     /// <summary>
-    /// Clase de servicios para la entidad: <see cref="Alumno"/>
+    /// Clase de servicios para la entidad: <see cref="Pago"/>
     /// </summary>
-    public static class AlumnoServicios
+    public static class PagoServicios
     {
         /// <summary>
         /// Gets this instance.
@@ -18,11 +16,18 @@ namespace backend_upc_5_2023.Servicios
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         /// <exception cref="System.Data.SqlClient.SqlException"></exception>
-        public static IEnumerable<T> Get<T>()
+        public static IEnumerable<Pago> Get()
         {
-            const string sql = "SP_OBTENERALUMNO";
+            const string sql = "SP_OBTENERPAGO";
 
-            return DBManager.Instance.GetData<T>(sql);
+            var enummerablePagos = DBManager.Instance.GetData<Pago>(sql);
+
+            foreach (var item in enummerablePagos)
+            {
+                item.Alumno = AlumnoServicios.GetById<Alumno>(item.IdAlumno);
+            }
+
+            return enummerablePagos;
         }
 
         /// <summary>
@@ -31,33 +36,37 @@ namespace backend_upc_5_2023.Servicios
         /// <typeparam name="T"></typeparam>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
-        public static T GetById<T>(int id)
+        public static Pago GetById(int id)
         {
-            const string sql = "SP_OBTENERALUMNOBYID";
+            const string sql = "SP_OBTENERPAGOBYID";
 
             var parameters = new DynamicParameters();
             parameters.Add("@ID", id, DbType.Int64);
 
-            var result = DBManager.Instance.GetDataConParametros<T>(sql, parameters);
+            var result = DBManager.Instance.GetDataConParametros<Pago>(sql, parameters);
+
+            Pago pago = result.FirstOrDefault();
+
+            if (pago != null)
+            {
+                pago.Alumno = AlumnoServicios.GetById<Alumno>(pago.IdAlumno);
+            }
 
             return result.FirstOrDefault();
         }
-        
 
         /// <summary>
-        /// Inserts the specified categoría.
+        /// Inserts the specified pago.
         /// </summary>
-        /// <param name="alumno">The categoría.</param>
+        /// <param name="pago">The producto.</param>
         /// <returns></returns>
         /// <exception cref="System.Data.SqlClient.SqlException"></exception>
-        public static int Insert(Alumno alumno)
+        public static int Insert(Pago pago)
         {
-            const string sql = "SP_INSERTARALUMNO";
-
+            const string sql = "SP_INSERTARPAGO";
             var parameters = new DynamicParameters();
-            parameters.Add("@NOMBRE_COMPLETO", alumno.NombreCompleto, DbType.String);
-            parameters.Add("@CURSO", alumno.Curso, DbType.String);
-            parameters.Add("@GESTION", alumno.Gestion, DbType.Int64);
+            parameters.Add("@MONTO", pago.Monto, DbType.Int64);
+            parameters.Add("@ID_ALUMNO", pago.IdAlumno, DbType.Int64);
 
             var result = DBManager.Instance.SetData(sql, parameters);
 
@@ -65,20 +74,19 @@ namespace backend_upc_5_2023.Servicios
         }
 
         /// <summary>
-        /// Updates the specified categoría.
+        /// Updates the specified pago.
         /// </summary>
-        /// <param name="alumno">The categoría.</param>
+        /// <param name="pago">The pago.</param>
         /// <returns></returns>
         /// <exception cref="System.Data.SqlClient.SqlException"></exception>
-        public static int Update(Alumno alumno)
+        public static int Update(Pago pago)
         {
-            const string sql = "SP_ACTUALIZARALUMNO";
+            const string sql = "SP_ACTUALIZARPAGO";
 
             var parameters = new DynamicParameters();
-            parameters.Add("@ID", alumno.Id, DbType.Int64);
-            parameters.Add("@NOMBRE_COMPLETO", alumno.NombreCompleto, DbType.String);
-            parameters.Add("@CURSO", alumno.Curso, DbType.String);
-            parameters.Add("@GESTION", alumno.Gestion, DbType.Int64);
+            parameters.Add("@ID", pago.Id, DbType.Int64);
+            parameters.Add("@MONTO", pago.Monto, DbType.Int64);
+            parameters.Add("@ID_ALUMNO", pago.IdAlumno, DbType.Int64);
 
             var result = DBManager.Instance.SetData(sql, parameters);
 
@@ -93,7 +101,7 @@ namespace backend_upc_5_2023.Servicios
         /// <exception cref="System.Data.SqlClient.SqlException"></exception>
         public static int Delete(int id)
         {
-            const string sql = "SP_ELIMINARALUMNO";
+            const string sql = "SP_ELIMINARPAGO";
 
             var parameters = new DynamicParameters();
             parameters.Add("@ID", id, DbType.Int64);
@@ -101,5 +109,7 @@ namespace backend_upc_5_2023.Servicios
             var result = DBManager.Instance.SetData(sql, parameters);
             return result;
         }
+
+        
     }
 }
