@@ -22,7 +22,7 @@ namespace PruebaUnitarias
 
             // Act
             // Usar M�todos
-            var result = PagoServicios.Get<Pago>();//un listado
+            var result = PagoServicios.Get();//un listado
 
             // Assert
             // Las Comparaciones
@@ -33,7 +33,7 @@ namespace PruebaUnitarias
         public void Pago_GetById_RegresaItem()
         {
             Console.WriteLine("TestPriority(1)");
-            var result = PagoServicios.GetById<Pago>(1);
+            var result = PagoServicios.GetById(1);
             Assert.Equal(1, result.Id);
         }
 
